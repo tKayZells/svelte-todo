@@ -1,6 +1,10 @@
 /** @type {import('tailwindcss').Config} */
 module.exports = {
-  content: ["./src/App.svelte", './src/lib/*.{html,js,svelte,ts}'],
+  content: [
+    './src/App.svelte',
+    './src/lib/*.{html,js,svelte,ts}',
+    './src/lib/**/*.{html,js,svelte,ts}'
+  ],
   theme: {
     extend: {
       width: {
