@@ -1,3 +1,4 @@
+<svelte:options immutable />
 <script lang="ts">
 	import { fade } from "svelte/transition"
 	import Todo from "./Todo.svelte";
