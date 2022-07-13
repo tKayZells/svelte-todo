@@ -13,7 +13,7 @@
 
 	const ENTER_KEY = 'Enter'
 	function handlerOnKeyDown( event : KeyboardEvent ){
-		if(event.key === ENTER_KEY){
+		if(event.key === ENTER_KEY && newTask.length > 0){
 			tasks = [...tasks, {
 				text: newTask,
 				id: window.crypto.randomUUID()
@@ -23,12 +23,12 @@
 	}
 </script>
 
-<div class="flex flex-col w-1/3">
-    <h1 class="text-xl text-center mb-2">{ title }</h1>
+<div class="flex flex-col p-5 border border-dashed rounded-md border-gray-800">
+    <h1 class="text-xl text-center mb-2 font-bold">{ title }</h1>
     {#each tasks as task (task.id)}
         <Todo bind:task={task.text} on:click={() => handlerOnDelete(task.id)} />
     {:else}
-        <p in:fade out:fade={{ duration: 250 }} class="m-auto italic text-s">No tasks left on this panel</p>
+        <p in:fade out:fade={{ duration: 250 }} class="mx-auto italic text-sm text-gray-500">No tasks left on this panel</p>
     {/each}
     <div class="my-4 border border-b-gray-400 h-0.5"></div>
     <div class="flex flex-col my-6">
