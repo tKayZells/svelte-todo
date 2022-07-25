@@ -1,37 +1,40 @@
-<svelte:options immutable />
-
 <script lang="ts">
+import type { Task, ToDo } from "../../store/todoStore"
 import { fade } from "svelte/transition";
 import Todo from "./Todo.svelte";
+import { todo, tasks } from "../../store/todoStore";
+import { onDestroy } from "svelte";
 
 export let title: string = "Pending";
+export let id: string = ""
 
-let tasks: { text: string; id: string }[] = [];
+const { add, remove } = tasks.forList(id)
+
+let items : Task[] = []
 let newTask: string = "";
 
-function handlerOnDelete(id: string) {
-  tasks = tasks.filter((el) => el.id !== id);
-}
+const todoUnsubscribe = todo.subscribe( (todo : ToDo[]) => {
+  items = todo.find( el => el.id === id).items
+})
+
+onDestroy( () => {
+  todoUnsubscribe()
+})
 
 const ENTER_KEY = "Enter";
 function handlerOnKeyDown(event: KeyboardEvent) {
   if (event.key === ENTER_KEY && newTask.length > 0) {
-    tasks = [
-      ...tasks,
-      {
-        text: newTask,
-        id: window.crypto.randomUUID(),
-      },
-    ];
+    add(newTask)
     newTask = "";
   }
 }
+
 </script>
 
 <div class="flex flex-col p-5 border border-dashed rounded-md border-gray-800">
   <h1 class="text-xl text-center mb-2 font-bold">{title}</h1>
-  {#each tasks as task (task.id)}
-    <Todo bind:task="{task.text}" on:click="{() => handlerOnDelete(task.id)}" />
+  {#each items as task (task.id)}
+    <Todo bind:task="{task.text}" on:click="{() => remove(task.id)}" />
   {:else}
     <p
       in:fade

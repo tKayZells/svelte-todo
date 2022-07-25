@@ -1,29 +1,22 @@
 <script lang="ts">
 import Panel from "./Panel.svelte";
+import { todo } from "../../store/todoStore";
 
-let panels: { title: string; id: string }[] = [
-  { title: "Pending", id: window.crypto.randomUUID() },
-];
 let newPanel: string = "";
 
 const ENTER_KEY = "Enter";
 function handlerOnKeyDown(event: KeyboardEvent) {
   if (event.key === ENTER_KEY && newPanel.length > 0) {
-    panels = [
-      ...panels,
-      {
-        title: newPanel,
-        id: window.crypto.randomUUID(),
-      },
-    ];
+    todo.add(newPanel)
     newPanel = "";
   }
 }
+
 </script>
 
 <div class="flex flex-row mt-4 items-start gap-5 w-full h-screen overflow-x-auto">
-  {#each panels as panel (panel.id)}
-    <Panel title="{panel.title}" />
+  {#each $todo as panel (panel.id)}
+    <Panel id={panel.id} title="{panel.header}" />
   {/each}
   <div
     class="flex flex-col p-5 justify-center border border-dashed rounded-md border-gray-400">
