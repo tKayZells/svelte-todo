@@ -1,6 +1,7 @@
 <script lang="ts">
 import Panel from "./Panel.svelte";
 import { todo } from "../../store/todoStore";
+import Input from "../../components/Input/Input.svelte";
 
 let newPanel: string = "";
 
@@ -20,14 +21,11 @@ function handlerOnKeyDown(event: KeyboardEvent) {
   {/each}
   <div
     class="flex flex-col p-5 justify-center border border-dashed rounded-md border-gray-400">
-    <label class="mx-2 text-gray-500 text-xs" for="newTask"
-      >Add new Panel</label>
-    <input
-      id="newTask"
-      name="newTask"
-      on:keydown="{handlerOnKeyDown}"
-      bind:value="{newPanel}"
-      class="m-2 p-2 border border-gray-300 border-b-black border-b-2"
-      type="text" />
+    <Input
+      label="Add new Panel"
+      name="newPanel"
+      bind:value={newPanel}
+      handlerOnKeyDown={handlerOnKeyDown}
+    />
   </div>
 </div>

@@ -4,6 +4,7 @@ import { fade } from "svelte/transition";
 import Todo from "./Todo.svelte";
 import { todo, tasks } from "../../store/todoStore";
 import { onDestroy } from "svelte";
+import Input from "../../components/Input/Input.svelte";
 
 export let title: string = "Pending";
 export let id: string = ""
@@ -45,13 +46,11 @@ function handlerOnKeyDown(event: KeyboardEvent) {
   {/each}
   <div class="my-4 border border-b-gray-400 h-0.5"></div>
   <div class="flex flex-col my-6">
-    <label class="mx-2 text-gray-500 text-xs" for="newTask">Add new Task</label>
-    <input
-      id="newTask"
+    <Input
+      label="Add new Task"
       name="newTask"
-      on:keydown="{handlerOnKeyDown}"
-      bind:value="{newTask}"
-      class="m-2 p-2 border border-gray-300 border-b-black border-b-2"
-      type="text" />
+      bind:value={newTask}
+      handlerOnKeyDown={handlerOnKeyDown}
+    />
   </div>
 </div>
