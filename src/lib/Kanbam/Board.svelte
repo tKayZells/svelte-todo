@@ -21,7 +21,7 @@ function handlerOnKeyDown(event: KeyboardEvent) {
 }
 </script>
 
-<div class="flex flex-row mt-4 items-start gap-5 w-full">
+<div class="flex flex-row mt-4 items-start gap-5 w-full h-screen overflow-x-auto">
   {#each panels as panel (panel.id)}
     <Panel title="{panel.title}" />
   {/each}
