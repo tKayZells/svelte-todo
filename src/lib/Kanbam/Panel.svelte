@@ -8,8 +8,10 @@ import Input from "../../components/Input/Input.svelte";
 
 export let title: string = "Pending";
 export let id: string = ""
+let draggedElementId: string = ""
+let targetElementId: string = ""
 
-const { add, remove } = tasks.forList(id)
+const { add, remove, swap } = tasks.forList(id)
 
 let items : Task[] = []
 let newTask: string = "";
@@ -30,12 +32,56 @@ function handlerOnKeyDown(event: KeyboardEvent) {
   }
 }
 
+function drop_handler(ev) {
+  console.log(ev)
+}
+
+function drop(event, task){
+  console.log(task, draggedElementId, targetElementId)
+  if(draggedElementId === targetElementId
+    || targetElementId.length < 1
+    || draggedElementId.length < 1)
+    return;
+
+  swap(
+    items.findIndex(el => el.id === draggedElementId),
+    items.findIndex(el => el.id === targetElementId)
+  )
+
+  draggedElementId = ""
+  targetElementId = ""
+}
+
+function dragenter(event, task){
+  if(draggedElementId !== targetElementId && task.id !== draggedElementId) {
+    targetElementId = task.id
+  }
+}
+
 </script>
 
-<div class="flex flex-col p-5 border border-dashed rounded-md border-gray-800">
+<div
+  class="flex flex-col p-5 border border-dashed rounded-md border-gray-800"
+  on:dragenter|preventDefault
+  on:dragover|preventDefault
+  on:drop|preventDefault={drop_handler}
+>
   <h1 class="text-xl text-center mb-2 font-bold">{title}</h1>
-  {#each items as task (task.id)}
-    <Todo bind:task="{task.text}" on:click="{() => remove(task.id)}" />
+  {#each items as task,i (i)}
+    <Todo
+      dragged={draggedElementId === task.id}
+      hasElementOver={targetElementId === task.id}
+      bind:task="{task.text}"
+      on:click="{() => remove(task.id)}"
+      on:drag={_e => draggedElementId = task.id}
+      on:drop={e => drop(e, task)}
+      on:dragend={ _e => {
+        draggedElementId = ""
+        targetElementId = ""
+      }}
+      on:dragenter={e => dragenter(e, task)}
+      on:dragleave={_e => targetElementId = ""}
+    />
   {:else}
     <p
       in:fade

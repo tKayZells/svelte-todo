@@ -41,6 +41,12 @@ export const tasks = {
 				toDo.items = toDo.items.filter(el => el.id !== taskId)
 				return toDo
 			}),
+			swap: ( originIdx: number, targetIdx : number) => todo.update({ id: toDoId }, toDo =>{
+				const ele = toDo.items[targetIdx]
+				toDo.items[targetIdx] = toDo.items[originIdx];
+				toDo.items[originIdx] = ele
+				return toDo;
+			}),
 			update: (task: Partial<Task>) => todo.update({id: toDoId}, toDo => {
 				toDo.items = toDo.items.map(el => el.id === task.id ? {...el, ...task} : el)
 				return toDo
